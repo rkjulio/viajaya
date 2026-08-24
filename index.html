@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ViajaYa - Agencia de viajes virtual. Encuentra destinos, hoteles y paquetes turísticos.">
+  <title>ViajaYa | Tu próximo destino comienza aquí</title>
+  <style>
+    :root{
+      --primary:#087f8c;
+      --primary-dark:#05606a;
+      --accent:#ffb703;
+      --dark:#102a43;
+      --text:#243b53;
+      --muted:#627d98;
+      --light:#f5f9fc;
+      --white:#fff;
+      --border:#d9e2ec;
+      --shadow:0 12px 35px rgba(16,42,67,.10);
+      --radius:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:Arial,Helvetica,sans-serif;color:var(--text);background:var(--white);line-height:1.5}
+    a{text-decoration:none;color:inherit}
+    button,input,select{font:inherit}
+    .container{width:min(1160px,92%);margin:auto}
+
+    header{
+      position:sticky;top:0;z-index:1000;background:rgba(255,255,255,.96);
+      backdrop-filter:blur(12px);border-bottom:1px solid #edf2f7
+    }
+    .nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:25px}
+    .logo{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:800;color:var(--dark)}
+    .logo-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--primary),#14b8a6);display:grid;place-items:center;color:#fff;font-size:22px}
+    .logo span{color:var(--primary)}
+    .menu{display:flex;align-items:center;gap:25px;font-weight:600}
+    .menu a{color:var(--text);transition:.2s}
+    .menu a:hover{color:var(--primary)}
+    .nav-cta{background:var(--primary);color:#fff!important;padding:11px 17px;border-radius:12px}
+    .nav-cta:hover{background:var(--primary-dark)}
+    .hamburger{display:none;border:0;background:none;font-size:28px;cursor:pointer;color:var(--dark)}
+
+    .hero{
+      min-height:620px;display:flex;align-items:center;position:relative;overflow:hidden;
+      background:
+        linear-gradient(90deg,rgba(4,32,48,.82),rgba(4,32,48,.42),rgba(4,32,48,.12)),
+        url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=85") center/cover;
+      color:#fff;
+    }
+    .hero-content{padding:80px 0 120px;max-width:760px}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:8px 13px;border-radius:50px;font-weight:700;margin-bottom:20px}
+    .hero h1{font-size:clamp(42px,6vw,70px);line-height:1.04;margin-bottom:20px;letter-spacing:-2px}
+    .hero h1 span{color:#ffd166}
+    .hero p{font-size:20px;max-width:650px;color:#eef6f8;margin-bottom:30px}
+    .hero-buttons{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{border:0;border-radius:12px;padding:13px 20px;font-weight:800;cursor:pointer;transition:.2s;display:inline-flex;justify-content:center;align-items:center;gap:8px}
+    .btn-primary{background:var(--accent);color:#152536}
+    .btn-primary:hover{transform:translateY(-2px);filter:brightness(.96)}
+    .btn-light{background:#fff;color:var(--dark)}
+    .btn-light:hover{transform:translateY(-2px)}
+
+    .search-card{
+      margin-top:-65px;position:relative;z-index:5;background:#fff;border-radius:20px;
+      box-shadow:var(--shadow);padding:22px
+    }
+    .search-tabs{display:flex;gap:8px;border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:18px;flex-wrap:wrap}
+    .tab{border:0;background:#eef6f7;color:var(--text);padding:10px 16px;border-radius:10px;font-weight:700;cursor:pointer}
+    .tab.active{background:var(--primary);color:#fff}
+    .search-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr auto;gap:12px}
+    .field label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin:0 0 6px 3px;text-transform:uppercase}
+    .field input,.field select{width:100%;padding:13px;border:1px solid var(--border);border-radius:11px;outline:none;background:#fff;color:var(--text)}
+    .field input:focus,.field select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(8,127,140,.10)}
+    .search-btn{align-self:end;background:var(--primary);color:#fff;border:0;border-radius:11px;padding:13px 18px;font-weight:800;cursor:pointer}
+    .search-btn:hover{background:var(--primary-dark)}
+
+    section{padding:82px 0}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:30px}
+    .section-head h2{font-size:36px;line-height:1.15;color:var(--dark)}
+    .section-head p{color:var(--muted);max-width:590px}
+    .link{color:var(--primary);font-weight:800}
+
+    .destinations{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .destination{height:330px;border-radius:var(--radius);overflow:hidden;position:relative;box-shadow:var(--shadow);cursor:pointer}
+    .destination img{width:100%;height:100%;object-fit:cover;transition:.5s}
+    .destination:hover img{transform:scale(1.07)}
+    .destination:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,rgba(0,0,0,.78))}
+    .destination-info{position:absolute;z-index:2;left:20px;right:20px;bottom:20px;color:#fff}
+    .destination-info h3{font-size:24px}
+    .destination-info p{opacity:.9;font-size:14px}
+
+    .packages{background:var(--light)}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .card{background:#fff;border:1px solid #e8eef3;border-radius:var(--radius);overflow:hidden;box-shadow:0 8px 25px rgba(16,42,67,.06);transition:.25s}
+    .card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+    .card-img{height:220px;position:relative}
+    .card-img img{width:100%;height:100%;object-fit:cover}
+    .badge{position:absolute;top:15px;left:15px;background:var(--accent);color:#182433;padding:7px 10px;border-radius:8px;font-size:12px;font-weight:900}
+    .card-body{padding:20px}
+    .card-body h3{font-size:21px;color:var(--dark);margin-bottom:7px}
+    .card-body p{color:var(--muted);font-size:14px;margin-bottom:15px}
+    .price-row{display:flex;align-items:end;justify-content:space-between;gap:12px}
+    .price small{display:block;color:var(--muted);font-size:11px}
+    .price strong{font-size:23px;color:var(--primary)}
+    .mini-btn{background:#e9f7f8;color:var(--primary);border:0;padding:10px 13px;border-radius:10px;font-weight:800;cursor:pointer}
+
+    .features{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+    .feature{padding:26px;border:1px solid var(--border);border-radius:16px;background:#fff}
+    .feature-icon{font-size:32px;margin-bottom:13px}
+    .feature h3{color:var(--dark);margin-bottom:7px}
+    .feature p{font-size:14px;color:var(--muted)}
+
+    .offer{
+      background:linear-gradient(110deg,#05606a,#0b8d8c);color:#fff;border-radius:25px;padding:55px;
+      display:flex;align-items:center;justify-content:space-between;gap:30px;overflow:hidden;position:relative
+    }
+    .offer:after{content:"✈";position:absolute;right:45px;bottom:-50px;font-size:230px;color:rgba(255,255,255,.07);transform:rotate(-12deg)}
+    .offer h2{font-size:39px;max-width:600px;line-height:1.12;margin-bottom:12px}
+    .offer p{max-width:620px;color:#d8f4f3}
+    .offer .btn{position:relative;z-index:2}
+
+    .testimonials{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .testimonial{background:var(--light);padding:25px;border-radius:17px}
+    .stars{color:#f6a800;letter-spacing:2px;margin-bottom:12px}
+    .testimonial p{color:var(--text);margin-bottom:18px}
+    .person{font-weight:800;color:var(--dark)}
+    .person span{display:block;color:var(--muted);font-size:13px;font-weight:400}
+
+    .contact{background:var(--dark);color:#fff}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start}
+    .contact h2{font-size:38px;margin-bottom:12px}
+    .contact p{color:#c5d2de;margin-bottom:22px}
+    .contact-list{display:grid;gap:13px}
+    .contact-list div{display:flex;gap:10px;align-items:center}
+    .contact-form{background:#fff;padding:25px;border-radius:18px}
+    .contact-form .field{margin-bottom:14px}
+    .contact-form textarea{width:100%;min-height:120px;resize:vertical;padding:13px;border:1px solid var(--border);border-radius:11px;outline:none}
+    .contact-form .btn{width:100%;background:var(--primary);color:#fff}
+
+    footer{background:#081d2e;color:#aebfce;padding:28px 0}
+    .footer-row{display:flex;justify-content:space-between;gap:20px;align-items:center}
+    .footer-logo{color:#fff;font-weight:800;font-size:21px}
+    .footer-links{display:flex;gap:18px;font-size:14px}
+    .footer-links a:hover{color:#fff}
+
+    .whatsapp{
+      position:fixed;right:22px;bottom:22px;z-index:1001;width:58px;height:58px;border-radius:50%;
+      background:#25d366;color:#fff;display:grid;place-items:center;font-size:29px;
+      box-shadow:0 8px 25px rgba(0,0,0,.2)
+    }
+    .toast{
+      position:fixed;left:50%;bottom:25px;transform:translate(-50%,120px);background:#102a43;color:#fff;
+      padding:14px 20px;border-radius:12px;z-index:2000;transition:.3s;box-shadow:var(--shadow)
+    }
+    .toast.show{transform:translate(-50%,0)}
+
+    @media(max-width:900px){
+      .menu{display:none;position:absolute;top:76px;left:0;right:0;background:#fff;padding:20px;box-shadow:0 10px 25px rgba(0,0,0,.08);flex-direction:column;align-items:stretch}
+      .menu.open{display:flex}.hamburger{display:block}
+      .search-grid{grid-template-columns:1fr 1fr}.search-btn{width:100%}
+      .destinations{grid-template-columns:1fr 1fr}.cards{grid-template-columns:1fr 1fr}.features{grid-template-columns:1fr 1fr}
+      .contact-grid{grid-template-columns:1fr}.offer{padding:40px 30px}
+    }
+    @media(max-width:600px){
+      .hero{min-height:650px}.hero-content{padding:65px 0 110px}.hero p{font-size:17px}
+      .search-card{margin-top:-45px;padding:16px}.search-grid{grid-template-columns:1fr}
+      .destinations,.cards,.features,.testimonials{grid-template-columns:1fr}
+      .section-head{display:block}.section-head h2{font-size:30px;margin-bottom:8px}
+      section{padding:60px 0}.offer{display:block}.offer h2{font-size:31px;margin-bottom:15px}.offer .btn{margin-top:22px}
+      .footer-row{display:block}.footer-links{margin-top:15px;flex-wrap:wrap}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <a class="logo" href="#inicio" aria-label="ViajaYa inicio">
+      <div class="logo-mark">✈</div>
+      Viaja<span>Ya</span>
+    </a>
+
+    <nav class="menu" id="menu">
+      <a href="#inicio">Inicio</a>
+      <a href="#destinos">Destinos</a>
+      <a href="#paquetes">Paquetes</a>
+      <a href="#ofertas">Ofertas</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#contacto" class="nav-cta">Cotizar viaje</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú">☰</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="inicio">
+    <div class="container hero-content">
+      <div class="eyebrow">🌎 Viaja fácil, viaja seguro</div>
+      <h1>Tu próximo destino <span>comienza aquí.</span></h1>
+      <p>Encuentra experiencias inolvidables, paquetes turísticos y opciones de viaje diseñadas para ti.</p>
+      <div class="hero-buttons">
+        <a href="#destinos" class="btn btn-primary">Explorar destinos →</a>
+        <a href="#contacto" class="btn btn-light">Hablar con un asesor</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container" style="padding-top:0">
+    <div class="search-card">
+      <div class="search-tabs">
+        <button class="tab active" data-type="Paquete">🌴 Paquetes</button>
+        <button class="tab" data-type="Vuelo">✈️ Vuelos</button>
+        <button class="tab" data-type="Hotel">🏨 Hoteles</button>
+        <button class="tab" data-type="Experiencia">🎟️ Experiencias</button>
+      </div>
+      <form id="searchForm">
+        <div class="search-grid">
+          <div class="field">
+            <label>Destino</label>
+            <input id="destination" type="text" placeholder="¿A dónde quieres ir?" required>
+          </div>
+          <div class="field">
+            <label>Salida</label>
+            <input id="departure" type="date" required>
+          </div>
+          <div class="field">
+            <label>Regreso</label>
+            <input id="returnDate" type="date">
+          </div>
+          <div class="field">
+            <label>Viajeros</label>
+            <select id="travelers">
+              <option>1 viajero</option>
+              <option selected>2 viajeros</option>
+              <option>3 viajeros</option>
+              <option>4 viajeros</option>
+              <option>5+ viajeros</option>
+            </select>
+          </div>
+          <button class="search-btn" type="submit">Buscar</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section id="destinos">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Destinos populares</h2>
+          <p>Descubre algunos de los lugares favoritos de nuestros viajeros.</p>
+        </div>
+        <a class="link" href="#paquetes">Ver todos →</a>
+      </div>
+      <div class="destinations">
+        <article class="destination" onclick="selectDestination('Cartagena')">
+          <img src="https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?auto=format&fit=crop&w=900&q=80" alt="Cartagena">
+          <div class="destination-info"><h3>Cartagena</h3><p>Historia, playa y cultura</p></div>
+        </article>
+        <article class="destination" onclick="selectDestination('San Andrés')">
+          <img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=80" alt="Playa tropical">
+          <div class="destination-info"><h3>San Andrés</h3><p>Mar de siete colores</p></div>
+        </article>
+        <article class="destination" onclick="selectDestination('Medellín')">
+          <img src="https://images.unsplash.com/photo-1583531352515-8884af319dc1?auto=format&fit=crop&w=900&q=80" alt="Medellín">
+          <div class="destination-info"><h3>Medellín</h3><p>Ciudad de la eterna primavera</p></div>
+        </article>
+        <article class="destination" onclick="selectDestination('Santa Marta')">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80" alt="Santa Marta">
+          <div class="destination-info"><h3>Santa Marta</h3><p>Caribe, naturaleza y aventura</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="packages" id="paquetes">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Paquetes destacados</h2>
+          <p>Opciones pensadas para que disfrutes tu viaje sin complicaciones.</p>
+        </div>
+        <a class="link" href="#contacto">Solicitar cotización →</a>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <div class="card-img">
+            <span class="badge">MÁS VENDIDO</span>
+            <img src="https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?auto=format&fit=crop&w=1000&q=80" alt="Cartagena">
+          </div>
+          <div class="card-body">
+            <h3>Cartagena Caribe</h3>
+            <p>4 días / 3 noches · Hotel + desayuno + experiencia turística.</p>
+            <div class="price-row">
+              <div class="price"><small>Desde</small><strong>$899.000 COP</strong></div>
+              <button class="mini-btn" onclick="quote('Cartagena Caribe')">Cotizar</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-img">
+            <span class="badge">OFERTA</span>
+            <img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=80" alt="San Andrés">
+          </div>
+          <div class="card-body">
+            <h3>San Andrés Paraíso</h3>
+            <p>5 días / 4 noches · Hotel + desayuno + tour marítimo.</p>
+            <div class="price-row">
+              <div class="price"><small>Desde</small><strong>$1.290.000 COP</strong></div>
+              <button class="mini-btn" onclick="quote('San Andrés Paraíso')">Cotizar</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-img">
+            <span class="badge">NUEVO</span>
+            <img src="https://images.unsplash.com/photo-1583531352515-8884af319dc1?auto=format&fit=crop&w=1000&q=80" alt="Medellín">
+          </div>
+          <div class="card-body">
+            <h3>Medellín Experiencia</h3>
+            <p>3 días / 2 noches · Hotel + city tour + experiencia local.</p>
+            <div class="price-row">
+              <div class="price"><small>Desde</small><strong>$649.000 COP</strong></div>
+              <button class="mini-btn" onclick="quote('Medellín Experiencia')">Cotizar</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="nosotros">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Viajar contigo es nuestra prioridad</h2>
+          <p>Te acompañamos antes, durante y después de tu viaje para que puedas disfrutar con tranquilidad.</p>
+        </div>
+      </div>
+      <div class="features">
+        <div class="feature"><div class="feature-icon">🧳</div><h3>Viajes a tu medida</h3><p>Diseñamos opciones según tu destino, fechas, presupuesto y preferencias.</p></div>
+        <div class="feature"><div class="feature-icon">🔒</div><h3>Compra segura</h3><p>Trabajamos para ofrecerte un proceso claro y confiable.</p></div>
+        <div class="feature"><div class="feature-icon">💬</div><h3>Asesoría personalizada</h3><p>Recibe atención de un asesor para resolver tus dudas.</p></div>
+        <div class="feature"><div class="feature-icon">⭐</div><h3>Experiencias</h3><p>Encuentra actividades y destinos para crear recuerdos inolvidables.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ofertas" class="container">
+    <div class="offer">
+      <div>
+        <h2>¿Listo para tu próxima aventura?</h2>
+        <p>Cuéntanos qué viaje tienes en mente y recibe una propuesta personalizada.</p>
+      </div>
+      <a href="#contacto" class="btn btn-primary">Quiero cotizar</a>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Lo que dicen nuestros viajeros</h2>
+          <p>Una sección preparada para incorporar testimonios reales de tus clientes.</p>
+        </div>
+      </div>
+      <div class="testimonials">
+        <article class="testimonial"><div class="stars">★★★★★</div><p>“La atención fue excelente y nos ayudaron a organizar todo el viaje. Volveríamos a reservar.”</p><div class="person">María G.<span>Cliente</span></div></article>
+        <article class="testimonial"><div class="stars">★★★★★</div><p>“Encontramos una opción que se ajustaba a nuestro presupuesto y el proceso fue muy sencillo.”</p><div class="person">Carlos R.<span>Cliente</span></div></article>
+        <article class="testimonial"><div class="stars">★★★★★</div><p>“Nos encantó la experiencia. El acompañamiento hizo que viajáramos mucho más tranquilos.”</p><div class="person">Laura M.<span>Cliente</span></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contacto">
+    <div class="container contact-grid">
+      <div>
+        <h2>Hablemos de tu próximo viaje</h2>
+        <p>Déjanos tus datos y cuéntanos qué destino tienes en mente. Esta versión puede conectarse posteriormente con WhatsApp, correo y una base de datos.</p>
+        <div class="contact-list">
+          <div>📱 <span>WhatsApp: +57 300 000 0000</span></div>
+          <div>✉️ <span>Correo: reservas@viajaya.com</span></div>
+          <div>🌎 <span>Atención virtual en Colombia</span></div>
+        </div>
+      </div>
+      <form class="contact-form" id="contactForm">
+        <div class="field"><label>Nombre completo</label><input id="name" type="text" placeholder="Tu nombre" required></div>
+        <div class="field"><label>Correo</label><input id="email" type="email" placeholder="correo@ejemplo.com" required></div>
+        <div class="field"><label>Destino</label><input id="contactDestination" type="text" placeholder="Destino que deseas visitar"></div>
+        <div class="field"><label>Mensaje</label><textarea id="message" placeholder="Cuéntanos qué viaje estás buscando..."></textarea></div>
+        <button class="btn" type="submit">Enviar solicitud</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-logo">✈ ViajaYa</div>
+    <div>© <span id="year"></span> ViajaYa. Todos los derechos reservados.</div>
+    <div class="footer-links"><a href="#inicio">Inicio</a><a href="#paquetes">Paquetes</a><a href="#contacto">Contacto</a></div>
+  </div>
+</footer>
+
+<a class="whatsapp" href="https://wa.me/573000000000?text=Hola%20ViajaYa,%20quiero%20cotizar%20un%20viaje." target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">◉</a>
+<div class="toast" id="toast"></div>
+
+<script>
+  const menu = document.getElementById("menu");
+  const hamburger = document.getElementById("hamburger");
+  const toast = document.getElementById("toast");
+
+  hamburger.addEventListener("click", () => menu.classList.toggle("open"));
+  document.querySelectorAll(".menu a").forEach(a => a.addEventListener("click", () => menu.classList.remove("open")));
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  function showToast(message){
+    toast.textContent = message;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 3500);
+  }
+
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+    });
+  });
+
+  function selectDestination(destination){
+    document.getElementById("destination").value = destination;
+    document.getElementById("contactDestination").value = destination;
+    document.getElementById("inicio").scrollIntoView({behavior:"smooth"});
+    showToast("Destino seleccionado: " + destination);
+  }
+
+  function quote(packageName){
+    document.getElementById("contactDestination").value = packageName;
+    document.getElementById("message").value = "Hola, quiero cotizar el paquete " + packageName + ".";
+    document.getElementById("contacto").scrollIntoView({behavior:"smooth"});
+  }
+
+  document.getElementById("searchForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const destination = document.getElementById("destination").value.trim();
+    const type = document.querySelector(".tab.active").dataset.type;
+    showToast("Solicitud de " + type + " para " + destination + " preparada. Conecta aquí tu sistema de reservas.");
+    document.getElementById("contactDestination").value = destination;
+  });
+
+  document.getElementById("contactForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const name = document.getElementById("name").value.trim();
+    const destination = document.getElementById("contactDestination").value.trim() || "un destino por definir";
+    const message = document.getElementById("message").value.trim() || "Deseo recibir una cotización.";
+    const phone = "573000000000";
+    const text = `Hola ViajaYa. Soy ${name}. Deseo cotizar ${destination}. ${message}`;
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, "_blank");
+    showToast("Solicitud preparada para WhatsApp.");
+  });
+</script>
+</body>
+</html>
+'''
+
+path = Path("/mnt/data/viajaya_agencia_viajes.html")
+path.write_text(html, encoding="utf-8")
+print(f"Archivo creado: {path}")
